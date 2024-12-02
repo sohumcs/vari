@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VARI Heatmap Generator</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(to right, #f0f0f0, #e0e0e0);
+            color: #333;
+            text-align: center;
+            margin-top: 50px;
+        }
+        h1 {
+            font-family: 'Roboto', sans-serif;
+            color: #4CAF50;
+            font-size: 3rem;
+            font-weight: bold;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+        }
+        .container {
+            margin-top: 30px;
+        }
+        input[type="file"] {
+            font-size: 18px;
+            padding: 12px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 10px 0;
+            transition: background-color 0.3s;
+        }
+        input[type="file"]:hover {
+            background-color: #45a049;
+        }
+        button {
+            padding: 12px 30px;
+            font-size: 18px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .image-container {
+            display: flex;
+            justify-content: space-evenly;
+            margin-top: 40px;
+            flex-wrap: wrap;
+            gap: 30px;
+            text-align: center;
+        }
+        img {
+            max-width: 80%;
+            height: auto;
+            border-radius: 15px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease-in-out;
+        }
+        img:hover {
+            transform: scale(1.05);
+        }
+        .color-bar-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 30px;
+        }
+        .color-bar {
+            width: 20px;
+            height: 300px;
+            background: linear-gradient(to top, blue, green, yellow, red);
+            border-radius: 10px;
+            margin-left: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        .color-bar-text {
+            font-size: 14px;
+            margin-top: 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 300px;
+            color: #555;
+        }
+        .color-bar-text span {
+            margin-top: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }
+        .footer {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 16px;
+            color: #999;
+        }
+        .info-container {
+            margin-top: 50px;
+            background-color: #f9f9f9;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .info-container h2 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        .info-container p {
+            font-size: 16px;
+            color: #555;
+            margin-bottom: 20px;
+        }
+        .info-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>VARI Heatmap Generator</h1>
+    
+    <div class="container">
+        <!-- Form to upload image -->
+        <form action="/upload" method="POST" enctype="multipart/form-data">
+            <input type="file" name="file" accept="image/*" required>
+            <br>
+            <button type="submit">Upload Image</button>
+        </form>
+    </div>
+
+    {% if original_image %}
+    <div class="image-container">
+        <div>
+            <h3>Original Image</h3>
+            <!-- Correct path to access original image -->
+            <img src="{{ url_for('static', filename='images/' + original_image) }}" alt="Original Image">
+        </div>
+        <div>
+            <h3>VARI Heatmap</h3>
+            <!-- Correct path to access generated VARI heatmap -->
+            <img src="{{ url_for('static', filename='heatmaps/' + vari_image) }}" alt="VARI Heatmap">
+        </div>
+    </div>
+    <div class="color-bar-container">
+        <div class="color-bar"></div>
+        <div class="color-bar-text">
+            <span>High</span>
+            <span>Medium</span>
+            <span>Low</span>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Information about VARI Values -->
+    <div class="info-container">
+        <h2>Understanding VARI Values</h2>
+        <p>
+            The VARI index uses the difference between the green, red, and blue color channels to highlight vegetation. The heatmap below visualizes this variation.
+        </p>
+        <p>
+            - **Low Vegetation (Blue)**: Areas like water bodies, barren land, etc.<br>
+            - **Medium Vegetation (Green/Yellow)**: Grass, shrubs, or bushes.<br>
+            - **High Vegetation (Red)**: Dense and healthy crops, forests, or wooded areas.
+        </p>
+    </div>
+
+    <div class="footer">
+        <p>Powered by DTown Robotics | 2024</p>
+    </div>
+
+</body>
+</html>
